@@ -1,0 +1,382 @@
+
+def palindrome(s):
+    """ Returns True if s is a palindrome and False otherwise
+
+    >>> palindrome("racecar")
+    True
+    >>> palindrome("hEllo.ollEh")
+    True
+    >>> palindrome("midterm2")
+    False
+    """
+    if len(s) <= 1:
+        return True
+    else:
+        if (s[0].lower()) == (s[len(s)-1].lower()):
+            return palindrome(s[1:len(s)-1])
+        return False
+
+def ways(start, end, k, actions):
+    """Return the number of ways of reaching end from start by taking up to k actions
+
+    >>> ways(-1, 1, 5, [abs, lambda x: x+2]) # abs(-1) or -1+2, but not abs(abs(-1))
+    2
+    >>> ways(1, 10, 5, [lambda x: x+1, lambda x: x+4]) # 1+1+4+4, 1+4+4+1, or 1+4+1+4
+    3
+    >>> ways(1, 20, 5, [lambda x: x+1, lambda x:x+4])
+    0
+    >>> ways([3], [2, 3, 2, 3], 4, [lambda x: [2]+x, lambda x:2*x, lambda x: x[:-1]])
+    3
+    """
+    if start==end:
+        return 1
+    elif k=0
+        return 0
+    return sum([ways(f(start),end, k-1, actions) for f in actions])
+
+###### NOT DISCUSSED IN REVIEW SESSION ##########
+# def decrypt(s, d):
+#     """List all possible decoded strings of s.
+#
+#     >>> codes = {
+#     ...     'alan': 'spooky',
+#     ...     'al': 'drink',
+#     ...     'antu': 'your',
+#     ...     'turing': 'ghosts',
+#     ...     'tur': 'scary',
+#     ...     'ing': 'skeletons',
+#     ...     'ring': 'ovaltine'
+#     ... }
+#     >>> decrypt('alanturing', codes)
+#     ['drink your ovaltine', 'spooky ghosts', 'spooky scary skeletons']
+#     """
+#     if s == '':
+#         return []
+#     ms = []
+#     if ______________________________________________________:
+#         ms.append(_____________________________________________)
+#     for k in ________________________________________________:
+#         first, suffix = s[:k], s[k:]
+#     if ____________________________________________________:
+#         for rest in _________________________________________:
+#             ms.append(_________________________________________)
+#     return ms
+
+########################
+# Lists and Mutability #
+########################
+
+def splice(a, b, k):
+    """Return a list of the first k elements of a, then all of b, ten the rest of a.
+
+    >>> splice([2, 3, 4, 5], [6, 7], 2)
+    [2, 3, 6, 7, 4, 5]
+    """
+    return a[:k] + b + a[k:]
+
+def all_splice(a, b, c):
+    """Return a list of all k such that splicing b into a at position k gives c
+
+    >>> all_splice([1, 2], [3, 4], [1, 3, 4, 2])
+    [1]
+    >>> all_splice([1, 2, 1, 2], [1, 2], [1, 2, 1, 2, 1, 2])
+    [0, 2, 4]
+    """
+    return [for k in k range(len(a)+1) if splice(a,b,c)==c]
+
+############
+# Nonlocal #
+############
+
+def quota(f, limit):
+    """
+    >>> square = lambda x: x * x
+    >>> square = quota(square, 3)
+    >>> square(6)
+    36
+    >>> [square(5) for x in range(3)]
+    [25, 25, 25]
+    >>> square(5)
+    'Over quota! Limit is now 2'
+    >>> square(-6)
+    36
+    >>> square(-6)
+    'Over quota! Limit is now 1'
+    >>> square(7)
+    49
+    >>> square(5)
+    'Over quota! Limit is now 0'
+    """
+    values = []
+    def limited(n):
+        _______________________________________________________
+        y = ___________________________________________________
+        count = len(___________________________________________)
+        values.append(y)
+        if count < limit:
+            return ____________________________________________
+        limit = _______________________________________________
+        return 'Over quota! Limit is now' + ____________________
+    return limited
+
+############################
+# Iterators and Generators #
+############################
+
+def generate_constant(x):
+    """A generator function that repeats the same value X forever.
+
+    >>> two = generate_constant(2)
+    >>> next(two)
+    2
+    >>> next(two)
+    2
+    >>> sum([next(two) for _ in range(100)])
+    200
+    """
+    while True:
+        yield x
+
+
+def black_hole(seq, trap):
+    """A generator that yields items in SEQ until one of them matches TRAP,
+    in which case that value should be repeatedly yielded forever.
+
+    >>> trapped = black_hole([1, 2, 3], 2)
+    >>> [next(trapped) for _ in range(6)]
+    [1, 2, 2, 2, 2, 2]
+    >>> list(black_hole(range(5), 7))
+    [0, 1, 2, 3, 4]
+    """
+    for x in seq:
+        if x == trap:
+            yield from generate_constant(x)
+        else:
+            yield x
+
+
+###### NOT DISCUSSED IN REVIEW SESSION ##########
+# def amplify(f, x):
+#     """Yield the longest sequence x, f(x), f(f(x)), ... that are all true values.
+#
+#     >>> list(amplify(lambda s: s[1:], 'boxes'))
+#     ['boxes', 'oxes', 'xes', 'es', 's']
+#     >>> list(amplify(lambda x: x//2-1, 14))
+#     """
+#     while _____________________________________________________:
+#         yield _________________________________________________
+#         _______________________________________________________
+#
+# def numbers():
+#     i = 1
+#     while True:
+#         yield i
+#         i += 1
+#
+# def leaky(gen):
+#     """ A generator function that takes in an infinite generator gen.
+#     The kâ€™th element yielded by leaky should be a tuple containing the kâ€™th element
+#     and the k+1â€™th element of the generator.
+#
+#     >>> leaker = leaky(numbers())
+#     >>> [next(leaker) for _ in range(3)]
+#     [(1, 2), (2, 3), (3, 4)]
+#     """
+#     first = ___________________________________________________
+#     while True:
+#         second = ______________________________________________
+#         _______________________________________________________
+#         first = _______________________________________________
+
+###################
+# ADT (ADT Trees) #
+###################
+
+def max_path(t):
+    """ Return the maximum sum on a path from a root to a leaf
+
+    >>> max_path(tree(4, [tree(5), tree(2, [tree(2), tree(1)]), tree(1), tree(8, [tree(4)])]))
+    16
+
+    (reprinted for readability, first line is for doctest)
+    max_path(tree(4,
+                     [tree(5),
+                      tree(2,
+                          [tree(2),
+                           tree(1)]),
+                      tree(1),
+                      tree(8,
+                          [tree(4)])]))
+    """
+    max_val = label(t)
+    for b in branches(t):
+        max_val = max(max_val, sum(label(t), max_path(b)))
+    return max_val
+
+# CHALLENGE!
+def max_path_single(t):
+    """
+    >>> max_path_single(tree(4, [tree(5), tree(2, [tree(2), tree(1)]), tree(1), tree(8, [tree(4)])]))
+    16
+    """
+    return _____________ + max([________________________________________] + [0])
+
+#######################
+# OOP (Mutable Trees) #
+#######################
+
+def prune_tree(t, total):
+    """Destructively prune the tree t so that the sum of each path from root-to-leaf
+    is less than or equal to total. All values are positive numbers and t.label <= total.
+
+    >>> t1 = Tree(1, [Tree(2, [Tree(2, [Tree(1)]), Tree(3), Tree(4)]), Tree(3, [Tree(2), Tree(1, [Tree(5), Tree(1)])]), Tree(6, [Tree(2)])])
+    >>> prune_tree(t1, 6)
+    >>> print(t1)
+    1
+      2
+        2
+          1
+        3
+      3
+        2
+        1
+          1
+
+    (reprinted for readability, first line is for doctest)
+    t1 = Tree(1, [Tree(2, [Tree(2, [Tree(1)]),
+                               Tree(3),
+                               Tree(4)]),
+                      Tree(3, [Tree(2),
+                               Tree(1, [Tree(5), Tree(1)])]),
+                      Tree(6, [Tree(2)])])
+
+    """
+    t.branches = [b for b in t.branches t.labl + b.label <= total]
+    for b in t.branches:
+        prune_tree(b, total - t.label)
+
+################
+# Linked Lists #
+################
+def add(x, y):
+    return x + y
+
+def mul(x, y):
+    return x * y
+
+def combine_two(lnk, fn):
+    """ Return a new linked list with every two elements from lnk combined with fn.
+
+    >>> lnk1 = Link(1, Link(2, Link(3)))
+    >>> combine_two(lnk1, add)
+    Link(3, Link(3))
+    >>> lnk2 = Link(4, lnk1)
+    >>> combine_two(lnk2, mul)
+    Link(4, Link(6))
+    """
+    if _______________________________________________________:
+        return _______________________________________________
+    elif _____________________________________________________:
+        return _______________________________________________
+    combined = _______________________________________________
+    return ___________________________________________________
+
+
+####################################
+# ADT/OOP Definitions and Doctests #
+####################################
+
+# Tree ADT
+def tree(label, branches=[]):
+    return [label] + list(branches)
+
+def label(t):
+    return t[0]
+
+def branches(t):
+    return t[1:]
+
+def is_leaf(t):
+    return not branches(t)
+
+# Tree Class
+class Tree:
+    def __init__(self, label, branches=[]):
+        for b in branches:
+            assert isinstance(b, Tree)
+        self.label = label
+        self.branches = list(branches)
+
+    def is_leaf(self):
+        return not self.branches
+
+    def map(self, fn):
+        self.label = fn(self.label)
+        for b in self.branches:
+            b.map(fn)
+
+    def __contains__(self, e):
+        if self.label == e:
+            return True
+        for b in self.branches:
+            if e in b:
+                return True
+        return False
+
+    def __repr__(self):
+        if self.branches:
+            branch_str = ', ' + repr(self.branches)
+        else:
+            branch_str = ''
+        return 'Tree({0}{1})'.format(self.label, branch_str)
+
+    def __str__(self):
+        def print_tree(t, indent=0):
+            tree_str = '  ' * indent + str(t.label) + "\n"
+            for b in t.branches:
+                tree_str += print_tree(b, indent + 1)
+            return tree_str
+        return print_tree(self).rstrip()
+
+# Linked List Class
+class Link:
+    empty = ()
+
+    def __init__(self, first, rest=empty):
+        assert rest is Link.empty or isinstance(rest, Link)
+        self.first = first
+        self.rest = rest
+
+    @property
+    def second(self):
+        return self.rest.first
+
+    @second.setter
+    def second(self, value):
+        self.rest.first = value
+
+    def __repr__(self):
+        if self.rest is not Link.empty:
+            rest_repr = ', ' + repr(self.rest)
+        else:
+            rest_repr = ''
+        return 'Link(' + repr(self.first) + rest_repr + ')'
+
+    def __str__(self):
+        string = '<'
+        while self.rest is not Link.empty:
+            string += str(self.first) + ' '
+            self = self.rest
+        return string + str(self.first) + '>'
+
+# Testing
+if __name__ == "__main__":
+    import doctest, sys
+    if len(sys.argv) > 1:
+        name = sys.argv[1]
+        if name in globals():
+            doctest.run_docstring_examples(globals()[name], globals(), verbose=True)
+        else:
+            print("Please enter a valid function name.")
+    else:
+        doctest.testmod(verbose=True)

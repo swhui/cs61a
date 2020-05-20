@@ -1,0 +1,46 @@
+def biggest():
+    """Return a function that returns the largest argument it has ever received.
+
+    >>> f = biggest()
+    >>> f(3)
+    3
+    >>> f(5)
+    5
+    >>> f(2)
+    5
+    >>> g = biggest()
+    >>> g(4)
+    4
+    >>> g(f(1))
+    5
+    >>> g(4)
+    5
+    """
+    def f(x):
+        nonlocal game
+        if game is None or x > game:
+            game = x
+        return game
+    game = None
+    return f
+
+f = biggest()
+f(3)
+f(5)
+
+def sprout(s):
+    """Return a sprout containing the elements of Link s.
+
+    >>> a = Link(4, Link(6, Link(3, Link(7))))
+    >>> sprout(a)
+    Tree(4, [Tree(6), Tree(3, [Tree(7)])])
+    >>> sprout(Link(5, a))
+    Tree(5, [Tree(4), Tree(6, [Tree(3), Tree(7)])])
+    """
+    assert type(s) == Link
+    branches = []
+    if _________:
+        branches.append(_________)
+        if _________:
+            branches.append(_________)
+    return Tree(s.first, branches)
